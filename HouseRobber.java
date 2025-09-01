@@ -14,21 +14,18 @@
  * }
  */
 class Solution {
+    private Map<TreeNode, Integer> m =new HashMap<>();
     public int rob(TreeNode root) {
-    int[] res = robSub(root);
-    return Math.max(res[0], res[1]);
-}
-
-private int[] robSub(TreeNode root) {
-    if (root == null) return new int[2];
-    
-    int[] left = robSub(root.left);
-    int[] right = robSub(root.right);
-    int[] res = new int[2];
-
-    res[0] = Math.max(left[0], left[1]) + Math.max(right[0], right[1]);
-    res[1] = root.val + left[0] + right[0];
-    
-    return res;
-}
+        
+        if(root==null) return 0;
+        if(m.containsKey(root)) return m.get(root);
+        int r=root.val;
+        if(root.left!=null) r+=rob(root.left.left)+rob(root.left.right);
+        if(root.right!=null) r+=rob(root.right.left)+rob(root.right.right);
+        int skip=rob(root.left)+rob(root.right);
+        int res=Math.max(r, skip);
+        m.put(root,res);
+        return res;
+        
+    }
 }
